@@ -2,17 +2,19 @@ package wmx.com.feign_client_cat.feignClient;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
+import wmx.com.feign_client_cat.feignClient.fallbacks.FoodFeignClientFallback;
 import wmx.com.feign_client_cat.pojo.Person;
 
 import java.time.LocalDateTime;
 
 /**
  * 1、@FeignClient :声明接口为 feign 客户端，value 值为被请求的微服务名称(注册中心可以看到，配置文件中的spring.application.name属性值)，
- * value 可以省略如 @FeignClient("eureka-client-food")
+ * value 可以省略如 @FeignClient("eureka-client-food")，推荐使用 ${} 动态获取配置文件中的值,不用写死.
  * 2、@FeignClient 接口中的方法名称可以自定义，但建议保持与对方一致，请求方式必须一致，请求路径记得带上服务提供方上下文路径(如果有的话)
+ * <p>
  * 有些细节需要注意，下面注释中有说明
  */
-@FeignClient(value = "eureka-client-food")
+@FeignClient(name = "${feign.name.food}", fallback = FoodFeignClientFallback.class)
 public interface FoodFeignClient {
 
     /**
