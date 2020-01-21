@@ -3,6 +3,7 @@ package wmx.com.feign_client_cat.feignClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import wmx.com.feign_client_cat.feignClient.fallbacks.FoodFeignClientFallback;
+import wmx.com.feign_client_cat.feignClient.fallbacks.FoodFeignClientFallbackFactory;
 import wmx.com.feign_client_cat.pojo.Person;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,9 @@ import java.time.LocalDateTime;
  * 2、@FeignClient 接口中的方法名称可以自定义，但建议保持与对方一致，请求方式必须一致，请求路径记得带上服务提供方上下文路径(如果有的话)
  * <p>
  * 有些细节需要注意，下面注释中有说明
+ * 3、fallback 与 fallbackFactory 同时存在时，优先使用 fallback ，fallbackFactory 不起作用。
  */
-@FeignClient(name = "${feign.name.food}", fallback = FoodFeignClientFallback.class)
+@FeignClient(name = "${feign.name.food}", fallbackFactory = FoodFeignClientFallbackFactory.class /*, fallback = FoodFeignClientFallback.class*/)
 public interface FoodFeignClient {
 
     /**
@@ -23,7 +25,6 @@ public interface FoodFeignClient {
      * 2、@GetMapping 也可以拆开写成：@RequestMapping(value = "food/getHunanCuisine", method = RequestMethod.GET)
      * 3、参数为字符串时，如果没加 @RequestParam("uuid") 请求参数注解，则请求时会抛异常如下：
      * feign.FeignException: status 405/404 reading FoodFeignClient#getHunanCuisine(String)
-     * 4、低版本的 feignClient 方法中不支持 @GetMapping 注解，必须用 @RequestMapping，高版本开始支持 @GetMapping
      *
      * @return
      * @GetMapping("getHunanCuisine")
@@ -44,7 +45,7 @@ public interface FoodFeignClient {
 
     /**
      * 更新
-     * 1、高版本的 feignClient 中的 @PathVariable("uid") 注解可以不写 value 属性，如 @PathVariable，低版本则必须写
+     * 1、feignClient 中的 @PathVariable("uid") 注解可以不写 value 属性
      * 2、再次提醒：对于 String 参数，服务提供者方法上有没有加 @RequestParam，feignClient 客户端都需要加上，否则调用失败，抛异常：
      * feign.FeignException: status 405 reading FoodFeignClient#updateData(String,String)
      *

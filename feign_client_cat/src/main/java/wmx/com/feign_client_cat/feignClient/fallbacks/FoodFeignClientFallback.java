@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * @FeignClient fallback 回退实现类必须是 spring 组件，比如 @Service、@Repository、@Component 等
+ * fallback 服务回退实现类实现 @FeignClient 接口.
  */
 @Component
 @SuppressWarnings("all")

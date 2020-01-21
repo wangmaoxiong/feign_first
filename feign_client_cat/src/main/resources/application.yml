@@ -20,3 +20,9 @@ feign:
     enabled: true  # 开启 feign 的 hystrix 断路器功能。默认为 false，不开启
   name:
     food: eureka-client-food  #自定义参数，用于 @FeignClient 动态取值
+
+#配置 actuator
+management:
+  endpoint:
+    health:
+      show-details: always #将健康信息的细节展示给所有用户查看，默认为 never(不展示细节给所有用户)
